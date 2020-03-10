@@ -13,12 +13,12 @@ tcp_client_x.o: tcp_client_x.cpp
 	g++ -Wall -Wextra -pedantic -std=c++17 -c tcp_client_x.cpp
 
 client_y:	tcp_client_y.o
-    g++ tcp_client_y.o -o client_y
+	g++ tcp_client_y.o -o client_y
 
 tcp_client_y.o: tcp_client_y.cpp
-    g++ -Wall -Wextra -pedantic -std=c++17 -c tcp_client_y.cpp
+	g++ -Wall -Wextra -pedantic -std=c++17 -c tcp_client_y.cpp
 
 clean:
 	-rm -f *.o server
 	-rm -f *.o client_x
-    -rm -f *.o client_y
+	-rm -f *.o client_y
