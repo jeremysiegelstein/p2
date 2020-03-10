@@ -26,7 +26,7 @@ int main(int argc , char *argv[])
     fd_set readfds;
 
     //a message
-    char *message = "ECHO Daemon v1.0 \r\n";
+    char *message = " received before ";
 
     //initialise all client_socket[] to 0 so not checked
     for (i = 0; i < 2; i++)
@@ -123,12 +123,12 @@ int main(int argc , char *argv[])
                   (address.sin_port));
 
             //send new connection greeting message
-            if( send(new_socket, message, strlen(message), 0) != strlen(message) )
+            /*if( send(new_socket, message, strlen(message), 0) != strlen(message) )
             {
                 perror("send");
             }
 
-            puts("Welcome message sent successfully");
+            puts("Welcome message sent successfully");*/
 
             //add new socket to array of sockets
             for (i = 0; i < 2; i++)
