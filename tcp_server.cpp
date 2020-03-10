@@ -74,7 +74,11 @@ int main(int argc , char *argv[])
     addrlen = sizeof(address);
     puts("Waiting for connections ...");
 
-    while(TRUE)
+	int counter = 0;
+	int flag = 0;
+	char temp[1025] = {'\0'};
+
+    while(counter < 2)
     {
         //clear the socket set
         FD_ZERO(&readfds);
@@ -123,12 +127,12 @@ int main(int argc , char *argv[])
                   (address.sin_port));
 
             //send new connection greeting message
-            if( send(new_socket, message, strlen(message), 0) != strlen(message) )
+            /*if( send(new_socket, message, strlen(message), 0) != strlen(message) )
             {
                 perror("send");
             }
 
-            puts("Welcome message sent successfully");
+            puts("Welcome message sent successfully");*/
 
             //add new socket to array of sockets
             for (i = 0; i < 2; i++)
@@ -169,13 +173,21 @@ int main(int argc , char *argv[])
                 //Echo back the message that came in
                 else
                 {
-                    //set the string terminating NULL byte on the end
-                    //of the data read
-                    buffer[valread] = '\0';
-                    send(sd , buffer , strlen(buffer) , 0 );
+					counter++;
+					if(flag == 0) strcpy(temp, buffer);
+                    else{
+						strcat(temp, " received before ");
+						strcat(temp, buffer);
+						strcat(temp, "\n");
+					}
+					flag = 1;
                 }
             }
         }
+		if(counter == 2){
+			write(client_socket[0], temp, sizeof(temp));
+			write(client_socket[1], temp, sizeof(temp));
+		}
     }
 
     return 0;

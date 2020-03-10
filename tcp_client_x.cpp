@@ -14,6 +14,7 @@ void func(int sockfd)
         printf("Client X: ");
         n = 0;
         while ((buff[n++] = getchar()) != '\n');
+		buff[n-1] = '\0';
         write(sockfd, buff, sizeof(buff));
         bzero(buff, sizeof(buff));
         read(sockfd, buff, sizeof(buff));
