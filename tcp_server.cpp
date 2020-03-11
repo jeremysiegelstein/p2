@@ -8,6 +8,7 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/time.h> //FD_SET, FD_ISSET, FD_ZERO macros
+#include <iostream>
 
 #define TRUE   1
 #define PORT 12345
@@ -51,7 +52,6 @@ int main(int argc, char *argv[]){
     listen(sockfd, MAX_CLIENTS);
 
     //accept the incoming connection
-    addrlen = sizeof(address);
     puts("Waiting for connections ...");
 
     //Counter will be used to make sure that two messages have been received, on from each client
