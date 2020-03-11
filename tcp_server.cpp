@@ -8,15 +8,16 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <sys/time.h> //FD_SET, FD_ISSET, FD_ZERO macros
+#include <iostream>
 
 #define TRUE   1
 #define PORT 12345
 #define MAX_CLIENTS 2
 #define MAX 1024
 
-int main(int argc, char *argv[]){
+int main(){
     int opt = TRUE;
-    int sockfd, new_socket, client_socket[MAX_CLIENTS], i, sd;
+    int sockfd, new_socket, client_socket[MAX_CLIENTS], i, activity, addrlen, sd;
     int max_sd;
     struct sockaddr_in address;
 
@@ -31,7 +32,7 @@ int main(int argc, char *argv[]){
     }
 
     //create a master socket
-    sockfd = socket(AF_INET, SOCK_STREAM, 0));
+    sockfd = socket(AF_INET, SOCK_STREAM, 0);
 
     //set master socket to allow multiple connections,
     setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, (char *)&opt, sizeof(opt));
@@ -51,7 +52,7 @@ int main(int argc, char *argv[]){
     listen(sockfd, MAX_CLIENTS);
 
     //accept the incoming connection
-    addrlen = sizeof(address);
+	addrlen = sizeof(address);
     puts("Waiting for connections ...");
 
     //Counter will be used to make sure that two messages have been received, on from each client
@@ -87,7 +88,7 @@ int main(int argc, char *argv[]){
                 max_sd = sd;
         }
 
-        //wait for an activity on one of the sockets
+        //wait for an on one of the sockets
         //Set the timeout to NULL so that we wait indefinitely for activity
         activity = select( max_sd + 1, &readfds, NULL, NULL, NULL);
 
@@ -99,7 +100,7 @@ int main(int argc, char *argv[]){
         if (FD_ISSET(sockfd, &readfds)){
             //Check that the incoming connection is accepted
             //If not exit the program
-            if ((new_socket = accept(sockfd, (struct sockaddr *)&address, (socklen_t*)&sizeof(address))) < 0){
+            if ((new_socket = accept(sockfd, (struct sockaddr *)&address, (socklen_t*)&addrlen)) < 0){
                 std::cerr << "accept" << std::endl;
                 exit(EXIT_FAILURE);
             }
@@ -109,6 +110,7 @@ int main(int argc, char *argv[]){
                 //Find empty index in array of sockets and add the new one
                 if( client_socket[i] == 0 ){
                     client_socket[i] = new_socket;
+					std::cout << "New connection added to list of sockets as " << i << std::endl;
                     break;
                 }
             }
@@ -123,7 +125,7 @@ int main(int argc, char *argv[]){
                 //incoming message
                 if ((read( sd, buffer, MAX)) == 0){
                     //Somebody disconnected, get his details and print
-                    getpeername(sd, (struct sockaddr*)&address, (socklen_t*)&sizeof(address));
+                    getpeername(sd, (struct sockaddr*)&address, (socklen_t*)&addrlen);
 
                     //Close the socket and mark as 0 in list for reuse
                     close(sd);
