@@ -4,33 +4,32 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <iostream>
 
 #define PORT 12345
 //CLIENTS X AND Y HAVE THE SAME CODE
-void foo(int sockfd)
-{
+void foo(int sockfd){
     char buff[1024];
     int n;
-        bzero(buff, sizeof(buff));
-        std::cout << "Client X: " << std::endl;
-        n = 0;
-        //Populate buffer with your message
-        while ((buff[n++] = getchar()) != '\n' && n < buff);
-        //Get rid of the newline character
-		buff[n-1] = '\0';
-        //Write to the server
-        write(sockfd, buff, sizeof(buff));
-        //Clear the buffer
-        bzero(buff, sizeof(buff));
-        //Read from the server
-        read(sockfd, buff, sizeof(buff));
-        //Print from the server
-        std::cout << buff);
+    bzero(buff, sizeof(buff));
+    std::cout << "Client X: ";
+    n = 0;
+    //Populate buffer with your message
+    while ((buff[n++] = getchar()) != '\n'){}
+    //Get rid of the newline character
+	buff[n-1] = '\0';
+    //Write to the server
+    write(sockfd, buff, sizeof(buff));
+    //Clear the buffer
+    bzero(buff, sizeof(buff));
+    //Read from the server
+    read(sockfd, buff, sizeof(buff));
+    //Print from the server
+    std::cout << buff;
 }
 
-int main()
-{
-    int sockfd
+int main(){
+    int sockfd;
     struct sockaddr_in servaddr;
 
     // socket create and varification

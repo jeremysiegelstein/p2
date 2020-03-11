@@ -4,6 +4,7 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/socket.h>
+#include <iostream>
 
 #define PORT 12345
 //CLIENTS X AND Y HAVE THE SAME CODE
@@ -12,25 +13,25 @@ void foo(int sockfd)
     char buff[1024];
     int n;
         bzero(buff, sizeof(buff));
-        std::cout << "Client Y: " << std::endl;
+        std::cout << "Client Y: ";
         n = 0;
         //Populate buffer with your message
-        while ((buff[n++] = getchar()) != '\n' && n < buff);
+        while ((buff[n++] = getchar()) != '\n'){}
         //Get rid of the newline character
 		buff[n-1] = '\0';
         //Write to the server
         write(sockfd, buff, sizeof(buff));
         //Clear the buffer
         bzero(buff, sizeof(buff));
-        //Read from the server
+        //Read message from the server
         read(sockfd, buff, sizeof(buff));
-        //Print from the server
-        std::cout << buff);
+        //Print message from the server
+        std::cout << buff;
 }
 
 int main()
 {
-    int sockfd
+    int sockfd;
     struct sockaddr_in servaddr;
 
     // socket create and varification
@@ -39,7 +40,7 @@ int main()
     //Check that the socket is successfully created
     //If not, error
     if (sockfd == -1) {
-        std::cout << "Socket creation failed...\n" << std::endl;;
+        std::cout << "Socket creation failed...\n" << std::endl;
         exit(0);
     }
 
